@@ -173,28 +173,31 @@ bitmanip(unsigned long long int x, unsigned int w)
     case 'n':
     case 'N':
       tcsetattr(0, TCSANOW, &term_orig);
-      printf(c & 0x80? "insert man: ": "insert x: " );
+      printf(c & 0x20? "insert man: ": "insert x: " );
+      fflush(stdout);
       temp = ((unsigned long long int)getInteger()) & mask;
-      if(c & 0x80) man = temp; else x = temp;
-      tcsetattr(0, TCSANOW, &term);
+      if(c & 0x20) man = temp; else x = temp;
+      tcsetattr(0, TCSAFLUSH, &term);
       break;
 
     case 'f':
     case 'F':
-      tcsetattr(0, TCSANOW, &term_orig);
-      printf(c & 0x80? "insert man: ": "insert x: " );
+      tcsetattr(0, TCSAFLUSH, &term_orig);
+      printf(c & 0x20? "insert man: ": "insert x: " );
+      fflush(stdout);
       temp = ((unsigned long long int)getFloat()) & mask;
-      if(c & 0x80) man = temp; else x = temp;
-      tcsetattr(0, TCSANOW, &term);
+      if(c & 0x20) man = temp; else x = temp;
+      tcsetattr(0, TCSAFLUSH, &term);
       break;
 
     case 'b':
     case 'B':
-      tcsetattr(0, TCSANOW, &term_orig);
-      printf(c & 0x80? "insert man: ": "insert x: " );
+      tcsetattr(0, TCSAFLUSH, &term_orig);
+      printf(c & 0x20? "insert man: ": "insert x: " );
+      fflush(stdout);
       temp = ((unsigned long long int)getBinary()) & mask;
-      if(c & 0x80) man = temp; else x = temp;
-      tcsetattr(0, TCSANOW, &term);
+      if(c & 0x20) man = temp; else x = temp;
+      tcsetattr(0, TCSAFLUSH, &term);
       break;
 
     case 'p':
@@ -234,18 +237,19 @@ int main(int argc, char** argv)
 {
   if(argc < 3)
   { printf(
-      "Usage: bitmanip <preset> <bitwidth>\n"
-      "\tyou can manipulate a number by bit\n"
+      "Usage: bitmanip <x preset> <bitwidth>\n"
+      "\tyou can manipulate a integer, bit by bit\n"
       "\tthe maximum bitwidth depends on your machine\n"
-      "\tq, Q, CTRL-D to quit \n"
-      "\th, H to left shift manipulator\n"
-      "\tl, L to right shift manipulator\n"
-      "\tEnter to perform & operation with the number\n"
-      "\tSpace to perform | operation with the number\n"
-      "\tn/N set the number/manipulator by integer form\n"
-      "\tf/F set the number/manipulator by float form\n"
-      "\tb/B set the number/manipulator by binary form\n"
-      "\tp to toggle display mode between binary and hex\n"
+      "\tCommands are:\n"
+      "\t- q, Q, CTRL-D to quit \n"
+      "\t- h, H to left shift manipulator\n"
+      "\t- l, L to right shift manipulator\n"
+      "\t- Enter to perform & operation with the number\n"
+      "\t- Space to perform | operation with the number\n"
+      "\t- n/N set the manipulator/number in integer representation\n"
+      "\t- f/F set the manipulator/number in float representation\n"
+      "\t- b/B set the manipulator/number in binary representation\n"
+      "\t- p to switch display mode between binary and hex\n"
     );
     return 1;
   }
